@@ -38,21 +38,30 @@ override_dh_builddeb:
 	dh_builddeb --destdir=$(DEBDESTDIR)
 endif
 
-clean/%: debian/chlog
-	dh_auto_clean --sourcedirectory=$*
-
+clean/%: debian
 build/%:
 	dh_auto_build --sourcedirectory=$*
 
 install/%:
 	dh_auto_install --sourcedirectory=$*
 
-# Special cases
-install/horizon: horizon/debian
-	cd horizon && COMPILE=--install-layout=deb dh_auto_install
+override_dh_install: debian/superseded-packages
+	dh_install
 
 debian/overcast-monolith.substvars:
 	python -c 'import sys;print "overcast:supersededpackages="+", ".join(sys.argv[1:])' $$(cat debian/superseded-packages) >> debian/overcast-monolith.substvars
+
+debian/superseded-packages: debian/superseded-packages.manual
+	cat $< > $@
+	find debian/tmp/ -name PKG-INFO | xargs cat | grep ^Name:' ' | cut -f2- -d' ' | while read name; \
+	do \
+		if echo $$name | grep -q ^python-; \
+		then \
+			echo $$name >> $@; \
+		else \
+			echo python-$$name >> $@; \
+		fi; \
+	done
 
 debian/control: debian/control.stub $(patsubst %,debian/%.control,$(SERVERS) $(shell cat debian/superseded-packages))
 	cat $^ > $@
@@ -72,4 +81,4 @@ debian/chlog:
 		dch -D $(DIST) -r ""; \
 	fi
 
-.PHONY: debian/control debian/overcast-monolit.substvars debian/chlog debian/manifest
+.PHONY: debian/control debian/overcast-monolit.substvars debian/chlog debian/manifest debian/superseded-packages
