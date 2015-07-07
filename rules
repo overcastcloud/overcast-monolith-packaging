@@ -48,7 +48,7 @@ install/%:
 	dh_auto_install --sourcedirectory=$*
 
 install/horizon:
-	COMPILE=--install-layout=deb dh_auto_install --source-directory=horizon
+	COMPILE=--install-layout=deb dh_auto_install --sourcedirectory=horizon
 
 override_dh_install: debian/superseded-packages
 	dh_install
