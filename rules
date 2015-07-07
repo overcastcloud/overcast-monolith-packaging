@@ -66,7 +66,10 @@ debian/manifest:
 
 debian/chlog:
 	# Populate changelog here as clean target will be run.
-	dch --newversion $(BUILD_NUMBER) "Automated build"
-	dch -D $(DIST) -r ""
+	if [ -n "$(BUILD_NUMBER)" ]; \
+	then \
+		dch --newversion $(BUILD_NUMBER) "Automated build"; \
+		dch -D $(DIST) -r ""; \
+	fi
 
 .PHONY: debian/control debian/overcast-monolit.substvars debian/chlog debian/manifest
