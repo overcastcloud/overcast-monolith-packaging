@@ -38,21 +38,18 @@ override_dh_builddeb:
 	dh_builddeb --destdir=$(DEBDESTDIR)
 endif
 
-clean/%: %/debian
-	cd $* && dh_auto_clean
+clean/%:
+	dh_auto_clean --sourcedirectory=$*
 
-build/%: %/debian
-	cd $* && dh_auto_build
+build/%:
+	dh_auto_build --sourcedirectory=$*
 
-install/%: %/debian
-	cd $* && dh_auto_install
+install/%:
+	dh_auto_install --sourcedirectory=$*
 
 # Special cases
 install/horizon: horizon/debian
 	cd horizon && COMPILE=--install-layout=deb dh_auto_install
-
-%/debian:
-	ln -s ../debian $@
 
 debian/overcast-monolith.substvars:
 	python -c 'import sys;print "overcast:supersededpackages="+", ".join(sys.argv[1:])' $$(cat debian/superseded-packages) >> debian/overcast-monolith.substvars
