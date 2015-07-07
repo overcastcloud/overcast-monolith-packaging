@@ -38,7 +38,7 @@ override_dh_builddeb:
 	dh_builddeb --destdir=$(DEBDESTDIR)
 endif
 
-clean/%:
+clean/%: debian/chlog
 	dh_auto_clean --sourcedirectory=$*
 
 build/%:
