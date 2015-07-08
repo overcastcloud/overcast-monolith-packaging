@@ -51,11 +51,11 @@ install/horizon:
 
 override_dh_install:
 	$(MAKE) -f debian/rules debian/superseded-packages
-	$(MAKE) -f debian/rules debian/control debian/overcast-monolith.substvars
+	$(MAKE) -f debian/rules debian/control debian/overcast-python-monolith.substvars
 	dh_install
 
-debian/overcast-monolith.substvars:
-	python -c 'import sys;print "overcast:supersededpackages="+", ".join(sys.argv[1:])' $$(cat debian/superseded-packages) >> debian/overcast-monolith.substvars
+debian/overcast-python-monolith.substvars:
+	python -c 'import sys;print "overcast:supersededpackages="+", ".join(sys.argv[1:])' $$(cat debian/superseded-packages) >> debian/overcast-python-monolith.substvars
 
 debian/superseded-packages: debian/superseded-packages.manual
 	cat $< > $@
@@ -87,4 +87,4 @@ debian/chlog:
 		dch -D $(DIST) -r ""; \
 	fi
 
-.PHONY: debian/control debian/overcast-monolit.substvars debian/chlog debian/manifest debian/superseded-packages
+.PHONY: debian/control debian/overcast-python-monolith.substvars debian/chlog debian/manifest debian/superseded-packages
