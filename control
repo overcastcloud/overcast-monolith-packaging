@@ -1,4 +1,4 @@
-Source: overcast-monolith
+Source: overcast-python-monolith
 Section: admin
 Priority: optional
 Maintainer: Soren Hansen <Soren.Hansen@ril.com>
@@ -11,7 +11,7 @@ Build-Depends: debhelper (>= 7),
                python-dev
 Standards-Version: 3.9.2
 
-Package: overcast-monolith
+Package: overcast-python-monolith
 Architecture: any
 Replaces: ${overcast:supersededpackages}
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
