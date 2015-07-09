@@ -10,6 +10,7 @@ Build-Depends: debhelper (>= 7),
                python-prettytable,
                python-dev,
                libffi-dev,
+               dh-python,
                libssl-dev
 Standards-Version: 3.9.2
 
