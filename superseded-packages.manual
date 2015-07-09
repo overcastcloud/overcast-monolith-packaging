@@ -1,4 +1,5 @@
 ironic-common
 python-oslo-config
 python-oslo-context
-python-posix-ipc
+python-trollius
+websockify

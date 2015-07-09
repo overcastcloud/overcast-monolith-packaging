@@ -64,7 +64,7 @@ debian/overcast-python-monolith.substvars:
 
 debian/superseded-packages: debian/superseded-packages.manual
 	cat $< > $@
-	find debian/tmp/ -name PKG-INFO | xargs cat | grep ^Name:' ' | cut -f2- -d' ' | while read name; \
+	find debian/tmp/ -name PKG-INFO -o -type f -name '*.egg-info' | xargs cat | grep ^Name:' ' | cut -f2- -d' ' | while read name; \
 	do \
 		if echo $$name | grep -q ^python-; \
 		then \
