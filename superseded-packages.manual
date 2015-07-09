@@ -4,3 +4,4 @@ python-oslo-context
 python-trollius
 websockify
 python-openssl
+python-msgpack
