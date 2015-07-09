@@ -5,3 +5,6 @@ python-trollius
 websockify
 python-openssl
 python-msgpack
+python-appconf
+python-openstack-auth
+python-compressor
