@@ -68,9 +68,9 @@ debian/superseded-packages: debian/superseded-packages.manual
 	do \
 		if echo $$name | grep -q ^python-; \
 		then \
-			echo $$name | tr 'A-Z' 'a-z' >> $@; \
+			echo $$name | tr 'A-Z_' 'a-z-' >> $@; \
 		else \
-			echo python-$$name | tr 'A-Z' 'a-z' >> $@; \
+			echo python-$$name | tr 'A-Z_' 'a-z-' >> $@; \
 		fi; \
 	done
 
