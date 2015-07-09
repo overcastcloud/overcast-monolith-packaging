@@ -46,6 +46,11 @@ build/%:
 install/%:
 	dh_auto_install --sourcedirectory=$*
 
+# Special cases
+build/websockify:
+	$(MAKE) -C websockify -f Makefile. rebind.so
+	dh_auto_build --sourcedirectory=websockify
+
 install/horizon:
 	COMPILE=--install-layout=deb dh_auto_install --sourcedirectory=horizon
 
