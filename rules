@@ -44,7 +44,20 @@ build/%:
 	dh_auto_build --sourcedirectory=$*
 
 install/%:
-	dh_auto_install --sourcedirectory=$*
+	if test -e $*/*.egg-info/PKG-INFO; \
+	then \
+		name="$$(cat $*/*.egg-info/PKG-INFO | grep ^Name: | cut -f2- -d' ')" ;\
+		pkg_name="$$(grep -i ^$${name}' ' debian/pydist-overrides | awk -- '{print $$2}')"; \
+		if test -z "$${pkg_name}"; \
+		then \
+			name="python-$${name#python-}" ;\
+			pkg_name="$$(echo $$name | tr 'A-Z_' 'a-z-')" ;\
+		fi; \
+		dh_auto_install --sourcedirectory=$* --destdir=debian/$${pkg_name} ;\
+		echo $${pkg_name} >> debian/superseded-packages.self-contained; \
+	else \
+		dh_auto_install --sourcedirectory=$*; \
+	fi
 
 # Special cases
 build/websockify:
@@ -74,11 +87,16 @@ debian/superseded-packages: debian/superseded-packages.manual
 		fi; \
 	done
 
-debian/control: debian/control.stub $(patsubst %,debian/%.control,$(SERVERS) $(shell cat debian/superseded-packages))
+debian/control: debian/control.stub $(patsubst %,debian/%.self-contained.control,$(shell cat debian/superseded-packages.self-contained)) $(patsubst %,debian/%.transitional.control,$(SERVERS) $(shell cat debian/superseded-packages))
 	cat $^ > $@
 
-debian/%.control: debian/control.tmpl
+debian/%.transitional.control: debian/control.transitional.tmpl
 	sed -e s@PKGNAME@$*@g < $< > $@
+	echo $@ >> debian/clean
+
+debian/%.self-contained.control: debian/control.self-contained.tmpl
+	sed -e s@PKGNAME@$*@g < $< > $@
+	echo $@ >> debian/clean
 
 debian/manifest:
 	mv -f debian/manifest debian/manifest.old || touch debian/manifest.old
