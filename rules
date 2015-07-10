@@ -9,13 +9,13 @@ SERVERS := $(shell cat debian/servers)
 PACKAGES_THAT_NEED_USERS := python-nova python-cinder python-glance python-keystone python-neutron
 
 # Override upstream's pbr based packaging
-export PBR_VERSION=$(shell dpkg-parsechangelog  | grep ^Version: | cut -d ' ' -f2)
+export PBR_VERSION:=$(shell dpkg-parsechangelog  | grep ^Version: | cut -d ' ' -f2)
 export SKIP_PIP_INSTALL=1
 export SKIP_GIT_SDIST=1
 export SKIP_GENERATE_AUTHORS=1
 export SKIP_WRITE_GIT_CHANGELOG=1
 
-export DIST=$(shell dpkg-parsechangelog  | grep ^Distribution: | cut -d ' ' -f2)
+export DIST:=$(shell dpkg-parsechangelog  | grep ^Distribution: | cut -d ' ' -f2)
 
 
 %:
