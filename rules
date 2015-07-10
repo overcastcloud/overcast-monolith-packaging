@@ -2,10 +2,11 @@
 
 export DH_VERBOSE=1
 
-SHELL := sh -xe
+SHELL := sh -e
 
 PROJECTS := $(filter-out debian Makefile tools pool, $(wildcard *))
 SERVERS := $(shell cat debian/servers)
+PACKAGES_THAT_NEED_USERS := python-nova python-cinder python-glance python-keystone python-neutron
 
 # Override upstream's pbr based packaging
 export PBR_VERSION=$(shell dpkg-parsechangelog  | grep ^Version: | cut -d ' ' -f2)
@@ -67,10 +68,13 @@ build/websockify:
 install/horizon:
 	COMPILE=--install-layout=deb dh_auto_install --sourcedirectory=horizon
 
-override_dh_install:
+override_dh_install: $(patsubst %,debian/%.postinst,$(PACKAGES_THAT_NEED_USERS))
 	$(MAKE) -f debian/rules debian/superseded-packages
 	$(MAKE) -f debian/rules debian/control debian/overcast-python-monolith.substvars
 	dh_install
+
+debian/python-%.postinst: debian/postinst.openstack-template
+	sed -e s@%USER%@$*@g < $< > $@
 
 debian/overcast-python-monolith.substvars:
 	python -c 'import sys;print "overcast:supersededpackages="+", ".join(sys.argv[1:])' $$(cat debian/superseded-packages) >> debian/overcast-python-monolith.substvars

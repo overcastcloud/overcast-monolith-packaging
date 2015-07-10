@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+if [ "$1" = "configure" ]; then
+    if ! getent group %USER% > /dev/null 2>&1; then
+        addgroup --system $user >/dev/null
+    fi
+
+    if ! getent passwd %USER% > /dev/null 2>&1; then
+        adduser --system --home /var/lib/%USER% --ingroup %USER% --no-create-home --shell /bin/false %USER%
+    fi
+
+    if [ "$(id -gn %USER%)"  = "nogroup" ]; then
+      usermod -g %USER% %USER%
+    fi
+fi
+
+#DEBHELPER#
