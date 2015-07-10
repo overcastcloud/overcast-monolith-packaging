@@ -4,8 +4,7 @@ export DH_VERBOSE=1
 
 SHELL := sh -xe
 
-#PROJECTS := $(filter-out debian Makefile tools pool, $(wildcard *))
-PROJECTS := nova pyopenssl pint
+PROJECTS := $(filter-out debian Makefile tools pool, $(wildcard *))
 SERVERS := $(shell cat debian/servers)
 
 # Override upstream's pbr based packaging
