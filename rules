@@ -4,7 +4,8 @@ export DH_VERBOSE=1
 
 SHELL := sh -xe
 
-PROJECTS := $(filter-out debian Makefile tools pool, $(wildcard *))
+#PROJECTS := $(filter-out debian Makefile tools pool, $(wildcard *))
+PROJECTS := nova pyopenssl pint
 SERVERS := $(shell cat debian/servers)
 
 # Override upstream's pbr based packaging
@@ -44,9 +45,9 @@ build/%:
 	dh_auto_build --sourcedirectory=$*
 
 install/%:
-	if test -e $*/*.egg-info/PKG-INFO; \
+	if test -e $*/setup.py && (cd $*;python setup.py --name); \
 	then \
-		name="$$(cat $*/*.egg-info/PKG-INFO | grep ^Name: | cut -f2- -d' ')" ;\
+		name="$$(cd $*;python setup.py --name)" ;\
 		pkg_name="$$(grep -i ^$${name}' ' debian/pydist-overrides | awk -- '{print $$2}')"; \
 		if test -z "$${pkg_name}"; \
 		then \
