@@ -1,10 +1,4 @@
 ironic-common
 python-oslo-config
 python-oslo-context
-python-trollius
 websockify
-python-openssl
-python-msgpack
-python-appconf
-python-openstack-auth
-python-compressor

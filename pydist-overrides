@@ -1,1 +1,6 @@
 pysendfile python-sendfile
+pyopenssl python-openssl
+django_compressor python-compressor
+django_openstack_auth python-openstack-auth
+django_appconf python-appconf
+msgpack-python python-msgpack
